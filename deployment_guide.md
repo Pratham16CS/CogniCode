@@ -39,7 +39,7 @@ Render works best by pulling directly from your GitHub repository.
     *   **Root Directory**: `backend`
     *   **Environment**: `Python 3`
     *   **Build Command**: `pip install -r requirements.txt`
-    *   **Start Command**: `python -m uvicorn app.main:app --host 0.0.0.0 --port 10000`
+    *   **Start Command**: `python -m uvicorn app.main:app --host 0.0.0.0 --port 10000 --proxy-headers --forwarded-allow-ips='*'`
 4.  **Environment Variables**: Click **Advanced** and add:
     *   `DATABASE_URL`: *Your Neon connection string from Phase 1.*
     *   `GEMINI_API_KEY`: *Your Google API Key.*
