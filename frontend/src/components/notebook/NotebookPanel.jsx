@@ -34,16 +34,16 @@ export default function NotebookPanel() {
     }
 
     return (
-        <div className="flex flex-col h-full border-t border-border bg-bg-secondary">
+        <div className="flex flex-col h-full border-t border-accent/20 bg-[#0a1428]/95 backdrop-blur-md">
             {/* Tab bar */}
-            <div className="flex border-b border-border">
+            <div className="flex border-b border-accent/15 bg-gradient-to-r from-[#0f1c38]/60 to-transparent overflow-x-auto custom-scrollbar">
                 {tabs.map((tab) => (
                     <button
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id)}
-                        className={`px-4 py-2 text-xs font-medium transition-colors relative ${activeTab === tab.id
-                            ? "text-accent"
-                            : "text-text-muted hover:text-text-secondary"
+                        className={`px-5 py-3 text-[0.8rem] font-sans font-semibold tracking-[0.5px] whitespace-nowrap transition-all relative outline-none cursor-pointer ${activeTab === tab.id
+                            ? "text-accent-hover bg-accent/5"
+                            : "text-[#8fa3bf] hover:text-[#e2e8f0] hover:bg-[#0f1c38]/50"
                             }`}
                     >
                         {tab.label}
@@ -139,11 +139,11 @@ function QnAHistory({ fileId }) {
     }
 
     return (
-        <div className="space-y-4">
-            <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-2 text-xs text-text-secondary">
-                    <FiMessageCircle size={12} className="text-accent" />
-                    <span className="font-medium">{pairs.length} Q&A pair{pairs.length !== 1 ? "s" : ""} saved</span>
+        <div className="space-y-5">
+            <div className="flex items-center justify-between mb-4 border-b border-accent/15 pb-2">
+                <div className="flex items-center gap-2 text-xs font-mono tracking-widest uppercase text-accent-hover">
+                    <FiMessageCircle size={14} className="text-accent" />
+                    <span className="font-semibold">{pairs.length} Q&A pair{pairs.length !== 1 ? "s" : ""} saved</span>
                 </div>
                 <button
                     onClick={fetchHistory}
@@ -154,26 +154,28 @@ function QnAHistory({ fileId }) {
             </div>
 
             {pairs.map((pair, i) => (
-                <div key={i} className="bg-bg-primary rounded-lg border border-border overflow-hidden">
+                <div key={i} className="bg-[#050f23]/80 rounded-xl border border-accent/20 overflow-hidden shadow-[0_2px_15px_rgba(0,0,0,0.2)]">
                     {/* Question */}
-                    <div className="flex items-start gap-2 px-3 py-2.5 border-b border-border/50">
-                        <div className="w-5 h-5 rounded-full bg-accent/20 flex items-center justify-center shrink-0 mt-0.5">
-                            <FiUser size={10} className="text-accent" />
+                    <div className="flex items-start gap-3 px-4 py-3.5 border-b border-accent/15 bg-gradient-to-r from-[#0f1c38]/40 to-transparent">
+                        <div className="w-6 h-6 rounded-full bg-accent/10 border border-accent/30 flex items-center justify-center shrink-0">
+                            <FiUser size={12} className="text-accent-hover" />
                         </div>
                         <div>
-                            <span className="text-[10px] text-accent font-medium block mb-0.5">Question</span>
-                            <p className="text-xs text-text-primary leading-relaxed">{pair.question}</p>
+                            <span className="text-[0.7rem] uppercase font-mono tracking-widest text-accent-hover font-semibold block mb-1">Question</span>
+                            <p className="text-[0.9rem] text-[#f0f6ff] leading-[1.6] font-sans">{pair.question}</p>
                         </div>
                     </div>
                     {/* Answer */}
                     {pair.answer && (
-                        <div className="flex items-start gap-2 px-3 py-2.5 bg-bg-secondary/50">
-                            <div className="w-5 h-5 rounded-full bg-skeleton/20 flex items-center justify-center shrink-0 mt-0.5">
-                                <FiCpu size={10} className="text-skeleton" />
+                        <div className="flex items-start gap-3 px-4 py-4 bg-[#0a1428]/60">
+                            <div className="w-6 h-6 rounded-full bg-[#10b981]/10 border border-[#10b981]/30 flex items-center justify-center shrink-0">
+                                <FiCpu size={12} className="text-[#10b981]" />
                             </div>
-                            <div>
-                                <span className="text-[10px] text-skeleton font-medium block mb-0.5">Answer</span>
-                                <p className="text-xs text-text-secondary leading-relaxed whitespace-pre-wrap">{pair.answer}</p>
+                            <div className="flex-1">
+                                <span className="text-[0.7rem] uppercase font-mono tracking-widest text-[#10b981] font-semibold block mb-1">Answer</span>
+                                <div className="prose prose-sm prose-invert prose-p:text-[#b0bfd4] prose-code:text-[#7dd3fc] leading-[1.7] whitespace-pre-wrap font-sans max-w-none">
+                                    {pair.answer}
+                                </div>
                             </div>
                         </div>
                     )}
@@ -242,24 +244,24 @@ function UserNotes({ fileId }) {
 
     return (
         <div className="flex flex-col h-full gap-2">
-            <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 text-xs text-text-secondary">
-                    <FiEdit3 size={12} className="text-accent" />
-                    <span className="font-medium">Your personal notes for this file</span>
+            <div className="flex items-center justify-between border-b border-accent/15 pb-3">
+                <div className="flex items-center gap-2 text-[0.85rem] font-display text-[#e2e8f0] tracking-wide">
+                    <FiEdit3 size={14} className="text-accent" />
+                    <span className="font-semibold">Your Personal Notes</span>
                 </div>
-                <div className="flex items-center gap-1.5 text-[10px]">
+                <div className="flex items-center gap-2 text-[0.7rem] font-mono tracking-widest uppercase">
                     {saveStatus === "saving" && (
                         <span className="text-amber-400 flex items-center gap-1">
-                            <FiSave size={10} className="animate-pulse" /> Saving...
+                            <FiSave size={12} className="animate-pulse" /> Saving...
                         </span>
                     )}
                     {saveStatus === "saved" && (
-                        <span className="text-green-400 flex items-center gap-1">
-                            <FiCheck size={10} /> Saved
+                        <span className="text-[#10b981] flex items-center gap-1">
+                            <FiCheck size={12} /> Saved
                         </span>
                     )}
                     {saveStatus === "idle" && notes.length > 0 && (
-                        <span className="text-text-muted">Auto-saves as you type</span>
+                        <span className="text-[#64748b]">Auto-saves on idle</span>
                     )}
                 </div>
             </div>
@@ -267,11 +269,11 @@ function UserNotes({ fileId }) {
                 value={notes}
                 onChange={handleChange}
                 placeholder="Write your notes here...&#10;&#10;• Key takeaways from this file&#10;• Questions to research later&#10;• Your understanding of the logic&#10;• Anything you want to remember"
-                className="flex-1 min-h-[120px] w-full px-3 py-2.5 bg-bg-primary border border-border rounded-lg text-xs text-text-primary placeholder-text-muted/50 focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/20 transition-all resize-none font-mono leading-relaxed"
+                className="flex-1 mt-3 min-h-[120px] w-full px-4 py-3 bg-[#050f23]/80 border border-accent/20 rounded-xl text-[0.9rem] text-[#f0f6ff] placeholder-[#475569] focus:outline-none focus:border-accent/60 focus:bg-[#050f23] focus:shadow-[0_0_15px_rgba(59,130,246,0.15)] transition-all resize-none font-mono leading-[1.7]"
                 spellCheck="false"
             />
-            <div className="text-[10px] text-text-muted text-right">
-                {notes.length > 0 ? `${notes.split(/\s+/).filter(Boolean).length} words` : "No notes yet"}
+            <div className="text-[0.7rem] font-mono tracking-widest uppercase text-[#64748b] text-right mt-2">
+                {notes.length > 0 ? `${notes.split(/\s+/).filter(Boolean).length} WORDS` : "NO NOTES"}
             </div>
         </div>
     );

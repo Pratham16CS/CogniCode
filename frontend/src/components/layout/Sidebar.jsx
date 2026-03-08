@@ -23,7 +23,7 @@ const langColors = {
 
 function TreeNode({ node, depth = 0 }) {
     const [expanded, setExpanded] = useState(depth < 2);
-    const { setSelectedFile, setEditorContent, setChatMessages } = useAppStore();
+    const { selectedFile, setSelectedFile, setEditorContent, setChatMessages } = useAppStore();
 
     const isDir = node.type === "directory";
 
@@ -46,25 +46,30 @@ function TreeNode({ node, depth = 0 }) {
         <div>
             <button
                 onClick={handleClick}
-                className="w-full flex items-center gap-1.5 py-1 px-2 text-left text-sm hover:bg-bg-hover rounded transition-colors group"
-                style={{ paddingLeft: `${depth * 14 + 8}px` }}
+                className={`w-full flex items-center gap-2 py-1.5 px-2 text-left text-[0.85rem] font-sans transition-colors group cursor-pointer border-l-2 outline-none
+                    ${node.file_id === selectedFile?.id
+                        ? "bg-[#0f1c38]/80 border-accent text-[#f0f6ff] shadow-[inset_0_0_15px_rgba(59,130,246,0.1)]"
+                        : "border-transparent hover:bg-[#0f1c38]/50 text-[#b0bfd4] hover:text-[#e2e8f0]"
+                    }
+                `}
+                style={{ paddingLeft: `${depth * 14 + 12}px` }}
             >
                 {isDir ? (
                     <>
                         {expanded ? (
-                            <FiChevronDown size={12} className="text-text-muted shrink-0" />
+                            <FiChevronDown size={14} className="text-[#64748b] shrink-0" />
                         ) : (
-                            <FiChevronRight size={12} className="text-text-muted shrink-0" />
+                            <FiChevronRight size={14} className="text-[#64748b] shrink-0" />
                         )}
-                        <FiFolder size={14} className="text-accent shrink-0" />
+                        <FiFolder size={15} className="text-accent shrink-0" />
                     </>
                 ) : (
                     <>
-                        <span className="w-3 shrink-0" />
-                        <FiFile size={13} className="shrink-0" style={{ color: langColors[node.language] || "#64748b" }} />
+                        <span className="w-3.5 shrink-0" />
+                        <FiFile size={14} className="shrink-0" style={{ color: langColors[node.language] || "#8fa3bf" }} />
                     </>
                 )}
-                <span className="truncate text-text-secondary group-hover:text-text-primary transition-colors">
+                <span className="truncate">
                     {node.name}
                 </span>
             </button>
@@ -98,20 +103,20 @@ export default function Sidebar() {
         : fileTree;
 
     return (
-        <aside className="w-60 min-w-[200px] bg-bg-secondary border-r border-border flex flex-col shrink-0 overflow-hidden">
-            <div className="p-2 border-b border-border">
-                <div className="relative">
-                    <FiSearch className="absolute left-2.5 top-2 text-text-muted" size={13} />
+        <aside className="w-64 min-w-[220px] bg-[#0a1428]/95 backdrop-blur-md border-r border-accent/20 flex flex-col shrink-0 overflow-hidden shadow-[2px_0_15px_rgba(0,0,0,0.2)] z-40">
+            <div className="p-3 border-b border-accent/15 bg-gradient-to-b from-[#0f1c38]/40 to-transparent">
+                <div className="relative font-sans">
+                    <FiSearch className="absolute left-3 top-2.5 text-[#64748b]" size={14} />
                     <input
                         type="text"
                         placeholder="Search files..."
                         value={filter}
                         onChange={(e) => setFilter(e.target.value)}
-                        className="w-full pl-8 pr-3 py-1.5 bg-bg-primary border border-border rounded text-xs text-text-primary placeholder-text-muted focus:outline-none focus:border-accent transition-colors"
+                        className="w-full pl-9 pr-3 py-2 bg-[#050f23]/80 border border-accent/20 rounded shadow-[inset_0_1px_4px_rgba(0,0,0,0.4)] text-[0.8rem] text-[#e2e8f0] placeholder-[#475569] focus:outline-none focus:border-accent/80 focus:shadow-[0_0_10px_rgba(59,130,246,0.2)] transition-all"
                     />
                 </div>
             </div>
-            <div className="flex-1 overflow-y-auto py-1">
+            <div className="flex-1 overflow-y-auto py-2 custom-scrollbar">
                 {filteredTree.length > 0 ? (
                     filteredTree.map((node, i) => <TreeNode key={node.path || i} node={node} />)
                 ) : (

@@ -32,17 +32,17 @@ export default function TechStackCard({ techStack }) {
     const totalFiles = Object.values(languages).reduce((a, b) => a + b, 0);
 
     return (
-        <div className="glass-card p-5 space-y-5">
-            <h3 className="flex items-center gap-2 text-sm font-semibold text-text-primary">
-                <FiCode size={14} className="text-skeleton" /> Tech Stack
+        <div className="bg-[#0a1428]/80 border border-accent/20 rounded-2xl p-6 space-y-7 shadow-[0_4px_20px_rgba(0,0,0,0.3)] backdrop-blur-md">
+            <h3 className="flex items-center gap-2 text-[0.95rem] font-semibold text-[#e2e8f0] font-display uppercase tracking-wider m-0">
+                <FiCode size={16} className="text-[#10b981]" /> Tech Stack
             </h3>
 
             {/* Language bars */}
             {Object.keys(languages).length > 0 && (
                 <div>
-                    <p className="text-xs text-text-muted mb-3">Languages</p>
+                    <p className="text-[0.7rem] uppercase tracking-[2px] font-mono text-[#64748b] mb-3">Languages</p>
                     {/* Stacked bar */}
-                    <div className="h-3 flex rounded-full overflow-hidden mb-3">
+                    <div className="h-3.5 flex rounded-full overflow-hidden mb-4 shadow-[inset_0_2px_4px_rgba(0,0,0,0.4)] border border-bg-primary/50">
                         {Object.entries(languages)
                             .sort(([, a], [, b]) => b - a)
                             .map(([lang, count]) => (
@@ -58,18 +58,18 @@ export default function TechStackCard({ techStack }) {
                                 />
                             ))}
                     </div>
-                    <div className="flex flex-wrap gap-x-4 gap-y-1.5">
+                    <div className="flex flex-wrap gap-x-5 gap-y-2">
                         {Object.entries(languages)
                             .sort(([, a], [, b]) => b - a)
                             .slice(0, 8)
                             .map(([lang, count]) => (
-                                <span key={lang} className="flex items-center gap-1.5 text-xs text-text-secondary">
+                                <span key={lang} className="flex items-center gap-2 text-sm text-[#b0bfd4] font-sans">
                                     <span
-                                        className="w-2.5 h-2.5 rounded-full"
+                                        className="w-3 h-3 rounded-full shadow-[0_0_5px_rgba(0,0,0,0.5)]"
                                         style={{ backgroundColor: langColors[lang] || "#64748b" }}
                                     />
                                     {lang}
-                                    <span className="text-text-muted">({count})</span>
+                                    <span className="text-[#64748b] font-mono text-xs">({count})</span>
                                 </span>
                             ))}
                     </div>
@@ -79,14 +79,14 @@ export default function TechStackCard({ techStack }) {
             {/* Frameworks */}
             {frameworks.length > 0 && (
                 <div>
-                    <p className="flex items-center gap-1.5 text-xs text-text-muted mb-2">
-                        <FiPackage size={12} /> Frameworks
+                    <p className="flex items-center gap-2 text-[0.7rem] uppercase tracking-[2px] font-mono text-[#64748b] mb-3">
+                        <FiPackage size={14} /> Frameworks
                     </p>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-2.5">
                         {frameworks.map((fw) => (
                             <span
                                 key={fw}
-                                className="text-xs px-2.5 py-1 rounded-lg bg-accent/10 text-accent border border-accent/20"
+                                className="text-[0.85rem] px-3 py-1 rounded-md bg-accent/10 text-accent-hover border border-accent/25 shadow-[0_2px_10px_rgba(59,130,246,0.1)] font-sans"
                             >
                                 {fw}
                             </span>
@@ -98,14 +98,14 @@ export default function TechStackCard({ techStack }) {
             {/* Build Tools */}
             {buildTools.length > 0 && (
                 <div>
-                    <p className="flex items-center gap-1.5 text-xs text-text-muted mb-2">
-                        <FiTool size={12} /> Build Tools
+                    <p className="flex items-center gap-2 text-[0.7rem] uppercase tracking-[2px] font-mono text-[#64748b] mb-3">
+                        <FiTool size={14} /> Build Tools
                     </p>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-2.5">
                         {buildTools.map((tool) => (
                             <span
                                 key={tool}
-                                className="text-xs px-2.5 py-1 rounded-lg bg-bg-primary text-text-secondary border border-border"
+                                className="text-[0.85rem] px-3 py-1 rounded-md bg-[#050f23]/60 text-[#b0bfd4] border border-[#374766] shadow-[0_2px_10px_rgba(0,0,0,0.2)] font-sans"
                             >
                                 {tool}
                             </span>

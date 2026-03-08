@@ -17,25 +17,25 @@ export default function ProjectOverview({ repo }) {
     }
 
     return (
-        <div className="p-6 space-y-6 overflow-y-auto">
+        <div className="p-8 space-y-8 overflow-y-auto bg-bg-primary font-sans h-full">
             {/* Header */}
-            <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-accent to-skeleton flex items-center justify-center">
-                    <FiGitBranch className="text-white" size={20} />
+            <div className="flex items-center gap-4 border-b border-accent/15 pb-6">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#3b82f6] to-[#10b981] flex items-center justify-center shadow-[0_0_15px_rgba(59,130,246,0.2)]">
+                    <FiGitBranch className="text-white" size={24} />
                 </div>
                 <div>
-                    <h2 className="text-lg font-bold text-text-primary">{repo.repo_name}</h2>
-                    <p className="text-xs text-text-muted">{repo.total_files} files analyzed</p>
+                    <h2 className="text-2xl font-bold text-[#f0f6ff] font-display tracking-tight">{repo.repo_name}</h2>
+                    <p className="text-sm font-mono text-accent mt-1 tracking-wide">{repo.total_files} FILES ANALYZED</p>
                 </div>
             </div>
 
             {/* Overview */}
             {repo.project_overview && (
-                <div className="glass-card p-5">
-                    <h3 className="flex items-center gap-2 text-sm font-semibold text-text-primary mb-3">
-                        <FiLayers size={14} className="text-accent" /> Project Overview
+                <div className="bg-[#0a1428]/80 border border-accent/20 rounded-2xl p-6 shadow-[0_4px_20px_rgba(0,0,0,0.3)] backdrop-blur-md">
+                    <h3 className="flex items-center gap-2 text-[0.95rem] font-semibold text-[#e2e8f0] mb-4 font-display uppercase tracking-wider">
+                        <FiLayers size={16} className="text-accent" /> Project Overview
                     </h3>
-                    <div className="prose prose-invert prose-sm max-w-none text-text-secondary leading-relaxed [&_p]:mb-2">
+                    <div className="prose prose-invert prose-p:text-[#b0bfd4] prose-headings:text-[#e2e8f0] prose-a:text-accent hover:prose-a:text-accent-hover prose-strong:text-[#f0f6ff] prose-code:text-[#7dd3fc] max-w-none text-[0.95rem] leading-[1.7]">
                         <ReactMarkdown>{repo.project_overview}</ReactMarkdown>
                     </div>
                 </div>

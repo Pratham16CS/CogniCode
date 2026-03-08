@@ -34,9 +34,9 @@ export default function EditorPane({
     const monacoLang = langMap[language] || "plaintext";
 
     return (
-        <div className="flex flex-col h-full overflow-hidden">
+        <div className="flex flex-col h-full overflow-hidden bg-[#050f23]">
             <div
-                className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium border-b border-border"
+                className="flex items-center gap-2.5 px-4 py-2.5 text-[0.8rem] font-sans font-semibold border-b border-accent/20 bg-[#0a1428]/95 backdrop-blur-md shadow-[0_2px_10px_rgba(0,0,0,0.2)] z-10"
                 style={{ color: labelColor }}
             >
                 <span
@@ -69,7 +69,7 @@ export default function EditorPane({
                         renderLineHighlight: "gutter",
                         smoothScrolling: true,
                         cursorBlinking: "smooth",
-                        fontFamily: "'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace",
+                        fontFamily: "'Space Mono', 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace",
                         fontLigatures: true,
                     }}
                 />

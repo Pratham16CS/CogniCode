@@ -3,26 +3,37 @@
 /* === CogniCode Design System === */
 
 @theme {
-  --color-bg-primary: #0a0e1a;
-  --color-bg-secondary: #111827;
-  --color-bg-tertiary: #1a2035;
-  --color-bg-card: #1e2a3a;
-  --color-bg-hover: #253045;
-  --color-border: #2a3650;
-  --color-border-light: #374766;
-  --color-text-primary: #e8ecf4;
-  --color-text-secondary: #94a3b8;
-  --color-text-muted: #64748b;
-  --color-accent: #6366f1;
-  --color-accent-hover: #818cf8;
-  --color-accent-glow: rgba(99, 102, 241, 0.3);
+  /* New UI Palette */
+  --color-bg-primary: #050d1f;
+  --color-bg-secondary: #0a1428;
+  --color-bg-tertiary: #0f1c38;
+  --color-bg-card: rgba(10, 20, 40, 0.7);
+  --color-bg-hover: rgba(15, 28, 56, 0.8);
+  
+  --color-border: rgba(59, 130, 246, 0.25);
+  --color-border-light: rgba(59, 130, 246, 0.5);
+  
+  --color-text-primary: #f0f6ff;
+  --color-text-secondary: #b0bfd4;
+  --color-text-muted: #8fa3bf;
+  
+  --color-accent: #3b82f6; /* crt-green equivalent */
+  --color-accent-hover: #60a5fa;
+  --color-accent-glow: rgba(59, 130, 246, 0.3);
+  
+  /* Retained for backward compatibility */
   --color-success: #22c55e;
   --color-warning: #f59e0b;
   --color-error: #ef4444;
   --color-skeleton: #10b981;
   --color-skeleton-glow: rgba(16, 185, 129, 0.2);
-  --color-original: #6366f1;
-  --color-original-glow: rgba(99, 102, 241, 0.2);
+  --color-original: #3b82f6;
+  --color-original-glow: rgba(59, 130, 246, 0.2);
+
+  /* Fonts */
+  --font-sans: 'Inter', sans-serif;
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-mono: 'Space Mono', monospace;
 }
 
 /* === Base Styles === */
@@ -107,3 +118,86 @@ body {
 .monaco-editor .overflow-guard {
   border-radius: 8px;
 }
+
+/* === Landing Page 3D & CRT Animations === */
+.scene {
+  position: relative;
+  transform-style: preserve-3d;
+  transform: rotateY(-20deg) rotateX(8deg);
+  transition: transform 0.15s ease-out;
+}
+.computer-unit {
+  position: relative;
+  width: 380px;
+  height: 460px;
+  transform-style: preserve-3d;
+}
+.face {
+  position: absolute;
+  border: 1px solid rgba(59,130,246,0.1);
+}
+.face.front {
+  width: 380px; height: 460px; transform: translateZ(110px);
+  background: linear-gradient(160deg, #2a4a8a 0%, #1a3060 40%, #0f1c40 100%);
+  display: flex; flex-direction: column; align-items: center; padding-top: 40px;
+  box-shadow: inset 0 0 60px rgba(59,130,246,0.08), 0 0 60px rgba(59,130,246,0.15);
+}
+.face.back { width: 380px; height: 460px; transform: translateZ(-110px) rotateY(180deg); background: #071020; }
+.face.left { width: 220px; height: 460px; transform: rotateY(-90deg) translateZ(110px); background: linear-gradient(90deg, #0d1e3c, #152847); border-right: 1px solid rgba(59,130,246,0.2); }
+.face.right { width: 220px; height: 460px; transform: rotateY(90deg) translateZ(270px); background: linear-gradient(90deg, #071020, #0a1828); }
+.face.top { width: 380px; height: 220px; transform: rotateX(90deg) translateZ(110px); background: linear-gradient(180deg, #2a4070, #1a2e56); border-bottom: 1px solid rgba(59,130,246,0.3); }
+.face.bottom { width: 380px; height: 220px; transform: rotateX(-90deg) translateZ(350px); background: #050d20; box-shadow: 0 60px 100px rgba(0,0,0,0.8); }
+
+.screen-inset {
+  width: 300px; height: 240px; background: #050e22; border-radius: 10px;
+  box-shadow: inset 3px 3px 12px rgba(0,0,0,0.9), inset -2px -2px 8px rgba(59,130,246,0.2), 0 0 30px rgba(59,130,246,0.5), 0 0 60px rgba(59,130,246,0.2);
+  display: flex; align-items: center; justify-content: center; margin-bottom: 30px; position: relative; border: 2px solid rgba(59,130,246,0.35);
+}
+
+.crt {
+  width: 280px; height: 220px; background: #010610; border-radius: 6px; position: relative; overflow: hidden;
+  box-shadow: inset 0 0 30px rgba(0,0,0,0.9), 0 0 25px rgba(59,130,246,0.6);
+}
+.crt::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+  background-size: 100% 2px, 3px 100%; z-index: 10; pointer-events: none;
+}
+.crt-content {
+  padding: 14px; color: #7dd3fc; font-size: 13px; line-height: 1.4;
+  text-shadow: 0 0 10px rgba(125, 211, 252, 1), 0 0 20px rgba(59,130,246,0.8);
+  height: 100%; display: flex; flex-direction: column; overflow: hidden;
+}
+.bios-line { margin-bottom: 2px; white-space: nowrap; }
+.progress-container { margin-top: auto; padding-bottom: 10px; }
+.ascii-bar { font-size: 12px; letter-spacing: 1px; }
+
+@keyframes flicker {
+  0% { opacity: 0.97; } 50% { opacity: 1; } 100% { opacity: 0.98; }
+}
+.flicker { animation: flicker 0.15s infinite; }
+
+@keyframes scanline {
+  0% { bottom: 100%; } 100% { bottom: -100px; }
+}
+.scanline {
+  width: 100%; height: 100px; z-index: 8; background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(51, 255, 0, 0.05) 50%, rgba(0, 0, 0, 0) 100%);
+  opacity: 0.1; position: absolute; bottom: 100%; animation: scanline 6s linear infinite;
+}
+
+.logo-badge {
+  position: absolute; bottom: 30px; left: 30px; width: 22px; height: 28px; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  background: linear-gradient(180deg, #63B548 0%, #F6C829 33%, #E57D25 50%, #D83335 66%, #468CCF 100%); box-shadow: 0 0 10px rgba(255,200,100,0.4);
+}
+.floppy-slot {
+  width: 140px; height: 10px; background: #0a1630; border-radius: 3px; margin-left: 110px;
+  box-shadow: inset 2px 2px 5px rgba(0,0,0,0.8), 0 0 6px rgba(59,130,246,0.2); border: 1px solid rgba(59,130,246,0.2);
+}
+.keyboard-assembly {
+  position: absolute; width: 380px; height: 140px; bottom: -118px; transform-style: preserve-3d; transform: translateZ(174px) rotateX(66deg);
+}
+.kb-base {
+  position: absolute; width: 100%; height: 100%; background: linear-gradient(180deg, #1a3060, #0f1c40); transform: translateZ(9px); border: 1px solid rgba(59,130,246,0.2); border-radius: 4px;
+}
+.keys-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 5px; padding: 14px; }
+.key { height: 26px; background: linear-gradient(180deg, #2a4a8a, #1e3a6e); border-radius: 4px; box-shadow: 0 4px 0 #060e20, inset 0 1px 0 rgba(255,255,255,0.08); border: 1px solid rgba(59,130,246,0.15); }
