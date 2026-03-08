@@ -1,0 +1,109 @@
+@import "tailwindcss";
+
+/* === CogniCode Design System === */
+
+@theme {
+  --color-bg-primary: #0a0e1a;
+  --color-bg-secondary: #111827;
+  --color-bg-tertiary: #1a2035;
+  --color-bg-card: #1e2a3a;
+  --color-bg-hover: #253045;
+  --color-border: #2a3650;
+  --color-border-light: #374766;
+  --color-text-primary: #e8ecf4;
+  --color-text-secondary: #94a3b8;
+  --color-text-muted: #64748b;
+  --color-accent: #6366f1;
+  --color-accent-hover: #818cf8;
+  --color-accent-glow: rgba(99, 102, 241, 0.3);
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-skeleton: #10b981;
+  --color-skeleton-glow: rgba(16, 185, 129, 0.2);
+  --color-original: #6366f1;
+  --color-original-glow: rgba(99, 102, 241, 0.2);
+}
+
+/* === Base Styles === */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* === Scrollbar === */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-border-light);
+}
+
+/* === Custom Animations === */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 15px var(--color-accent-glow); }
+  50% { box-shadow: 0 0 30px var(--color-accent-glow), 0 0 60px rgba(99, 102, 241, 0.1); }
+}
+
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateX(-20px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.3s ease-out;
+}
+
+/* === Glass Effect === */
+.glass {
+  background: rgba(17, 24, 39, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--color-border);
+}
+
+.glass-card {
+  background: rgba(30, 42, 58, 0.6);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+/* === Monaco Editor Overrides === */
+.monaco-editor,
+.monaco-editor .overflow-guard {
+  border-radius: 8px;
+}

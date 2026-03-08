@@ -1,0 +1,38 @@
+# FastAPI & Server
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+python-multipart==0.0.18
+websockets==14.1
+
+# Database
+sqlalchemy[asyncio]==2.0.36
+aiosqlite==0.20.0
+
+# Auth
+passlib[bcrypt]==1.7.4
+python-jose[cryptography]==3.3.0
+bcrypt==4.2.1
+
+# LangChain + Providers
+langchain>=0.3.0
+langchain-core>=0.3.0
+langchain-google-genai>=2.0.0
+langchain-groq>=0.3.0
+langgraph>=0.3.0
+langgraph-checkpoint-sqlite>=2.0.0
+
+# Embeddings
+google-generativeai>=0.8.0
+
+# Git Operations
+gitpython==3.1.43
+
+# Config
+pydantic-settings==2.7.0
+
+# HTTP
+httpx==0.28.1
+aiofiles==24.1.0
+
+# Utils
+python-dotenv==1.0.1
