@@ -11,14 +11,14 @@ export default function ChatMessage({ message }) {
     return (
         <div className={`flex gap-2 ${isUser ? "justify-end" : "justify-start"}`}>
             {!isUser && (
-                <div className="w-7 h-7 rounded-full bg-accent/10 border border-accent/30 text-accent flex items-center justify-center shrink-0 mt-0.5 shadow-[0_0_8px_rgba(59,130,246,0.15)]">
-                    <FiCpu size={14} />
+                <div className="w-8 h-8 rounded-lg overflow-hidden border border-accent/30 shadow-[0_0_10px_rgba(59,130,246,0.2)] mt-0.5 shrink-0">
+                    <img src="/logo.png" alt="AI" className="w-full h-full object-cover" />
                 </div>
             )}
             <div
-                className={`max-w-[85%] px-3.5 py-2.5 rounded-xl text-[0.85rem] leading-[1.6] shadow-[0_2px_10px_rgba(0,0,0,0.1)] font-sans ${isUser
-                    ? "bg-[#0f1c38]/80 text-[#f0f6ff] border border-accent/20"
-                    : "bg-[#050f23]/60 text-[#b0bfd4] border border-[#374766]"
+                className={`max-w-[85%] px-4 py-3 rounded-2xl text-[0.9rem] leading-[1.65] shadow-[0_4px_15px_rgba(0,0,0,0.15)] font-sans transition-all ${isUser
+                    ? "bg-[#0f1c38]/90 text-[#f0f6ff] border border-accent/20 rounded-tr-none"
+                    : "bg-[#050f23]/80 text-[#e2e8f0] border border-white/5 rounded-tl-none backdrop-blur-sm"
                     }`}
             >
                 {message.cached && (
@@ -26,13 +26,20 @@ export default function ChatMessage({ message }) {
                         <FiZap size={12} /> Cached Answer
                     </span>
                 )}
-                <div className="prose prose-invert prose-sm max-w-none [&_p]:m-0 [&_pre]:bg-[#0a1428] [&_pre]:p-3 [&_pre]:border [&_pre]:border-accent/15 [&_pre]:rounded-lg [&_pre]:text-[0.75rem] [&_code]:text-[#7dd3fc] [&_code]:text-[0.8rem] [&_code]:font-mono">
+                <div className="prose prose-invert prose-sm max-w-none 
+                    prose-p:leading-[1.7] prose-p:text-[#b0bfd4] 
+                    prose-code:text-accent-hover prose-code:bg-black/30 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:before:content-none prose-code:after:content-none
+                    prose-pre:bg-black/50 prose-pre:border prose-pre:border-accent/15 prose-pre:rounded-xl prose-pre:my-3 prose-pre:p-4
+                    prose-strong:text-white prose-strong:font-bold
+                    prose-headings:text-white prose-headings:font-bold prose-headings:mb-2
+                    [&_ul]:my-2 [&_li]:my-1
+                ">
                     <ReactMarkdown>{message.content}</ReactMarkdown>
                 </div>
             </div>
             {isUser && (
-                <div className="w-7 h-7 rounded-full bg-[#0a1428]/80 border border-accent/20 text-[#8fa3bf] flex items-center justify-center shrink-0 mt-0.5 shadow-[0_2px_5px_rgba(0,0,0,0.2)]">
-                    <FiUser size={14} />
+                <div className="w-8 h-8 rounded-full bg-accent/20 border border-accent/40 text-accent-hover flex items-center justify-center shrink-0 mt-0.5 shadow-[0_0_10px_rgba(59,130,246,0.2)] font-bold text-xs uppercase">
+                    U
                 </div>
             )}
         </div>

@@ -41,18 +41,20 @@ async def get_chat_history(
     Get session chat history for a file.
     Tries LangGraph first, fallbacks to Postgres Notebook memory if empty.
     """
-    history = graph_service.get_session_history(user.id, file_id)
-    
-    if not history:
-        # Fallback to postgres
-        notebook = await _get_notebook(db, file_id, user.id)
-        if notebook.chat_history:
-            try:
-                history = json.loads(notebook.chat_history)
-            except json.JSONDecodeError:
-                pass
+    # Always fetch from notebook for persistent history
+    notebook = await _get_notebook(db, file_id, user.id)
+    history = []
+    if notebook.chat_history:
+        try:
+            history = json.loads(notebook.chat_history)
+        except json.JSONDecodeError:
+            pass
 
-    return {"history": history}
+    # If no history in notebook, try LangGraph (for new sessions)
+    if not history:
+        history = graph_service.get_session_history(user.id, file_id)
+
+    return {"history": _sanitize_history(history)}
 
 
 @router.delete("/{file_id}/history")
@@ -117,13 +119,11 @@ async def chat_about_file(
         await store_qa_with_embedding(db, notebook, data.message, reply, question_embedding, now)
         await db.flush()
 
-    # Build response history from LangGraph session
+    # LangGraph handles the active session window.
+    # Persistent history is already handled by store_qa_with_embedding above.
     history = graph_service.get_session_history(user.id, file_id)
-    chat_messages = [ChatMessage(role=h["role"], content=h["content"]) for h in history]
-    
-    # Sync back to Notebook model for standard fetching
-    notebook.chat_history = json.dumps([m.model_dump() for m in chat_messages])
-    await db.flush()
+    chat_messages = _sanitize_history(history)
+
 
     return ChatResponse(reply=reply, chat_history=chat_messages)
 

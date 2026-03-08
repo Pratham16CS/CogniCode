@@ -16,13 +16,10 @@ export default function Header() {
 
     return (
         <header className="h-14 flex items-center justify-between px-6 bg-[#0a1428]/95 backdrop-blur-md border-b border-accent/20 shrink-0 shadow-sm z-50">
-            {/* Left: Branding + Repo */}
             <div className="flex items-center gap-4">
-                <Link to="/home" className="flex items-center gap-2 hover:opacity-80 transition-opacity no-underline">
-                    <div className="w-7 h-7 rounded-md bg-gradient-to-br from-[#3b82f6] to-[#10b981] flex items-center justify-center shadow-[0_0_8px_rgba(59,130,246,0.3)]">
-                        <FiCode size={14} className="text-white" />
-                    </div>
-                    <span className="text-[1.05rem] font-bold text-accent-hover font-display tracking-[1px]">COGNICODE</span>
+                <Link to="/home" className="flex items-center gap-3 hover:opacity-90 transition-all no-underline">
+                    <img src="/logo.png" alt="CogniCode" className="w-8 h-8 rounded-lg shadow-[0_0_12px_rgba(59,130,246,0.4)] border border-accent/20" />
+                    <span className="text-[1.1rem] font-bold text-white font-display tracking-[1.5px] bg-clip-text text-transparent bg-gradient-to-r from-accent-hover to-[#10b981]">COGNICODE</span>
                 </Link>
                 {activeRepo && (
                     <>
@@ -54,13 +51,18 @@ export default function Header() {
                     <FiShield size={11} className="text-[#10b981]" />
                     <span className="text-[10px] uppercase font-mono tracking-widest text-[#10b981]">Sentinel</span>
                 </div>
-                <span className="text-xs font-sans text-[#b0bfd4] font-medium">{user?.username}</span>
+                <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-full bg-accent/20 border border-accent/40 flex items-center justify-center text-accent-hover font-bold text-sm shadow-[inset_0_0_8px_rgba(59,130,246,0.2)]">
+                        {user?.username?.[0]?.toUpperCase() || "U"}
+                    </div>
+                    <span className="text-xs font-sans text-[#e2e8f0] font-medium hidden sm:block">{user?.username}</span>
+                </div>
                 <button
                     onClick={logout}
-                    className="text-[#8fa3bf] hover:text-[#ef4444] transition-colors p-1.5 rounded hover:bg-[#ef4444]/10 cursor-pointer"
+                    className="text-[#8fa3bf] hover:text-[#ef4444] transition-all p-2 rounded-lg hover:bg-[#ef4444]/15 cursor-pointer border border-transparent hover:border-[#ef4444]/30"
                     title="Sign Out"
                 >
-                    <FiLogOut size={15} />
+                    <FiLogOut size={16} />
                 </button>
             </div>
         </header>

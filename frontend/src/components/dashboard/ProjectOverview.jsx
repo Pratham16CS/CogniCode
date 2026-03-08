@@ -35,7 +35,12 @@ export default function ProjectOverview({ repo }) {
                     <h3 className="flex items-center gap-2 text-[0.95rem] font-semibold text-[#e2e8f0] mb-4 font-display uppercase tracking-wider">
                         <FiLayers size={16} className="text-accent" /> Project Overview
                     </h3>
-                    <div className="prose prose-invert prose-p:text-[#b0bfd4] prose-headings:text-[#e2e8f0] prose-a:text-accent hover:prose-a:text-accent-hover prose-strong:text-[#f0f6ff] prose-code:text-[#7dd3fc] max-w-none text-[0.95rem] leading-[1.7]">
+                    <div className="prose prose-invert prose-sm max-w-none 
+                        prose-p:leading-[1.7] prose-p:text-[#b0bfd4] 
+                        prose-code:text-accent-hover prose-code:bg-black/30 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:before:content-none prose-code:after:content-none
+                        prose-pre:bg-black/50 prose-pre:border prose-pre:border-accent/15 prose-pre:rounded-xl prose-pre:my-3 prose-pre:p-4
+                        prose-strong:text-white prose-strong:font-bold
+                    ">
                         <ReactMarkdown>{repo.project_overview}</ReactMarkdown>
                     </div>
                 </div>

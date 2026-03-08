@@ -25,10 +25,14 @@ async def lifespan(app: FastAPI):
     """Startup: create DB tables and initialize LangGraph memory. Shutdown: clean up."""
     # Import all models to register them with Base
     import app.models  # noqa: F401
+    # Create extension and tables
+    from app.database import init_db
     from app.services import graph_service
-
-    # Create SQLAlchemy tables
+    
+    await init_db()
+    
     async with engine.begin() as conn:
+
         await conn.run_sync(Base.metadata.create_all)
     logger.info("Database tables created")
 

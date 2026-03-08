@@ -22,7 +22,12 @@ export default function FileContext({ fileContext }) {
                     Role in Project
                 </h4>
             </div>
-            <div className="prose prose-invert prose-sm max-w-none text-[#b0bfd4] leading-[1.7] font-sans prose-p:mb-3 prose-strong:text-[#f0f6ff] prose-code:text-[#7dd3fc] prose-code:text-[0.8rem] prose-ul:pl-5">
+            <div className="prose prose-invert prose-sm max-w-none 
+                prose-p:leading-[1.7] prose-p:text-[#b0bfd4] 
+                prose-code:text-accent-hover prose-code:bg-black/30 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:before:content-none prose-code:after:content-none
+                prose-pre:bg-black/50 prose-pre:border prose-pre:border-accent/15 prose-pre:rounded-xl prose-pre:my-3 prose-pre:p-4
+                prose-strong:text-white prose-strong:font-bold
+            ">
                 <ReactMarkdown>{fileContext}</ReactMarkdown>
             </div>
         </div>

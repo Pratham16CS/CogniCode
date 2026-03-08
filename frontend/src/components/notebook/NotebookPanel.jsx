@@ -4,6 +4,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
+import ReactMarkdown from "react-markdown";
 import { FiSave, FiCheck, FiEdit3, FiMessageCircle, FiUser, FiCpu, FiRefreshCw } from "react-icons/fi";
 import useAppStore from "../../store/appStore";
 import { notebookAPI } from "../../api/client";
@@ -156,25 +157,30 @@ function QnAHistory({ fileId }) {
             {pairs.map((pair, i) => (
                 <div key={i} className="bg-[#050f23]/80 rounded-xl border border-accent/20 overflow-hidden shadow-[0_2px_15px_rgba(0,0,0,0.2)]">
                     {/* Question */}
-                    <div className="flex items-start gap-3 px-4 py-3.5 border-b border-accent/15 bg-gradient-to-r from-[#0f1c38]/40 to-transparent">
-                        <div className="w-6 h-6 rounded-full bg-accent/10 border border-accent/30 flex items-center justify-center shrink-0">
-                            <FiUser size={12} className="text-accent-hover" />
+                    <div className="flex items-start gap-4 px-4 py-4 border-b border-accent/15 bg-gradient-to-r from-[#0f1c38]/50 to-transparent">
+                        <div className="w-8 h-8 rounded-full bg-accent/20 border border-accent/40 flex items-center justify-center text-accent-hover font-bold text-xs shrink-0 shadow-[0_0_10px_rgba(59,130,246,0.2)]">
+                            U
                         </div>
-                        <div>
-                            <span className="text-[0.7rem] uppercase font-mono tracking-widest text-accent-hover font-semibold block mb-1">Question</span>
-                            <p className="text-[0.9rem] text-[#f0f6ff] leading-[1.6] font-sans">{pair.question}</p>
+                        <div className="flex-1">
+                            <span className="text-[0.7rem] uppercase font-mono tracking-widest text-accent-hover font-semibold block mb-1.5 opacity-80">Question</span>
+                            <p className="text-[0.95rem] text-[#f0f6ff] leading-[1.6] font-sans font-medium">{pair.question}</p>
                         </div>
                     </div>
                     {/* Answer */}
                     {pair.answer && (
-                        <div className="flex items-start gap-3 px-4 py-4 bg-[#0a1428]/60">
-                            <div className="w-6 h-6 rounded-full bg-[#10b981]/10 border border-[#10b981]/30 flex items-center justify-center shrink-0">
-                                <FiCpu size={12} className="text-[#10b981]" />
+                        <div className="flex items-start gap-4 px-4 py-5 bg-[#0a1428]/60">
+                            <div className="w-8 h-8 rounded-lg overflow-hidden border border-[#10b981]/30 shadow-[0_0_10px_rgba(16,185,129,0.2)] shrink-0">
+                                <img src="/logo.png" alt="AI" className="w-full h-full object-cover" />
                             </div>
                             <div className="flex-1">
-                                <span className="text-[0.7rem] uppercase font-mono tracking-widest text-[#10b981] font-semibold block mb-1">Answer</span>
-                                <div className="prose prose-sm prose-invert prose-p:text-[#b0bfd4] prose-code:text-[#7dd3fc] leading-[1.7] whitespace-pre-wrap font-sans max-w-none">
-                                    {pair.answer}
+                                <span className="text-[0.7rem] uppercase font-mono tracking-widest text-[#10b981] font-semibold block mb-1.5 opacity-80">CogniCode Sense</span>
+                                <div className="prose prose-invert prose-sm max-w-none 
+                                    prose-p:leading-[1.7] prose-p:text-[#b0bfd4] 
+                                    prose-code:text-accent-hover prose-code:bg-black/30 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:before:content-none prose-code:after:content-none
+                                    prose-pre:bg-black/50 prose-pre:border prose-pre:border-accent/15 prose-pre:rounded-xl prose-pre:my-3 prose-pre:p-4
+                                    prose-strong:text-white prose-strong:font-bold
+                                ">
+                                    <ReactMarkdown>{pair.answer}</ReactMarkdown>
                                 </div>
                             </div>
                         </div>

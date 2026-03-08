@@ -39,9 +39,44 @@ async def find_cached_answer(
     file_analysis_id: int,
 ) -> Optional[str]:
     """
-    Search past chat history for a similar question.
+    Search past chat history for a similar question using pgvector in SQL.
     Returns the cached answer if found, None otherwise.
     """
+    # Check if we are on Postgres to use native vector search
+    from sqlalchemy import text
+    from app.database import db_url
+    
+    if "postgresql" in db_url:
+        # pgvector search using Euclidean distance (<->) or Cosine distance (<=>)
+        # We use a subquery or join to find the matching reply in chat_history
+        # For simplicity in this MVP, we find the best matching notebook entry 
+        # that has a question_embedding similar to ours.
+        
+        # Note: If multiple notebooks exist for the same file, we pick the best.
+        # However, notebooks are currently unique per file_analysis.
+        # We need to search through ALL notebook updates? 
+        # Actually, our current model stores ONE chat_history JSON per notebook.
+        # If we want to search *history* via SQL, we'd need a message-level table.
+        # For now, let's keep the persistence in JSON but use the latest question_embedding
+        # for a quick check if the *last* question was similar.
+        
+        result = await db.execute(
+            select(Notebook)
+            .where(Notebook.file_analysis_id == file_analysis_id)
+            .where(Notebook.question_embedding.l2_distance(question_embedding) < 0.4) # Approx SIMILARITY_THRESHOLD
+            .order_by(Notebook.question_embedding.l2_distance(question_embedding))
+            .limit(1)
+        )
+        notebook = result.scalar_one_or_none()
+        if notebook and notebook.chat_history:
+            history = json.loads(notebook.chat_history)
+            # Find the last assistant message
+            for entry in reversed(history):
+                if entry.get("role") == "assistant":
+                    return entry.get("content")
+        return None
+
+    # Fallback for SQLite (manual loop)
     result = await db.execute(
         select(Notebook).where(Notebook.file_analysis_id == file_analysis_id)
     )
@@ -58,6 +93,7 @@ async def find_cached_answer(
     # Search through Q&A pairs with embeddings
     best_similarity = 0.0
     best_answer = None
+    best_answer_idx = None
 
     for entry in history:
         if entry.get("role") != "user" or "embedding" not in entry:
@@ -85,6 +121,7 @@ async def find_cached_answer(
         return best_answer
 
     return None
+
 
 
 async def store_qa_with_embedding(
@@ -117,6 +154,8 @@ async def store_qa_with_embedding(
     })
 
     notebook.chat_history = json.dumps(history)
+    # Update the primary question_embedding for the next quick SQL lookup
+    notebook.question_embedding = question_embedding
     await db.flush()
 
     logger.info(f"Stored Q&A with embedding for notebook {notebook.id}")
