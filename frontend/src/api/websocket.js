@@ -22,9 +22,20 @@ class WebSocketManager {
         this.disconnect();
         this.repoId = repoId;
 
-        const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-        const host = window.location.host;
-        this.ws = new WebSocket(`${protocol}//${host}/api/ws/${repoId}`);
+        let wsUrl = import.meta.env.VITE_WS_BASE_URL;
+
+        if (!wsUrl) {
+            const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+            const host = window.location.host;
+            wsUrl = `${protocol}//${host}/api/ws`;
+        } else if (wsUrl.startsWith("/")) {
+            // Relative path like /api/ws
+            const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+            const host = window.location.host;
+            wsUrl = `${protocol}//${host}${wsUrl}`;
+        }
+
+        this.ws = new WebSocket(`${wsUrl}/${repoId}`);
 
         this.ws.onopen = () => {
             this.reconnectAttempts = 0;

@@ -56,7 +56,11 @@ Render works best by pulling directly from your GitHub repository.
     *   **Root Directory**: `frontend`
     *   **Build Command**: `npm install && npm run build`
     *   **Publish Directory**: `dist`
-3.  **Redirects/Rewrites**:
+4.  **Environment Variables**: Click **Advanced** and add:
+    *   `VITE_API_BASE_URL`: `https://cognicode-backend.onrender.com/api`
+    *   `VITE_WS_BASE_URL`: `wss://cognicode-backend.onrender.com/api/ws`
+    *   *(Note: Replace `cognicode-backend.onrender.com` with your actual backend URL from Phase 3.)*
+5.  **Redirects/Rewrites**:
     *   Since Vite uses a proxy locally, we need to handle the `/api` requests in production.
     *   Go to **Redirects/Rewrites** in the Render dashboard.
     *   **Add Rule**:
