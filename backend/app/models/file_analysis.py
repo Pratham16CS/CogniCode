@@ -24,8 +24,8 @@ class FileAnalysis(Base):
     logical_core = Column(Text, nullable=True)  # Explanation of algorithms/logic
     file_context = Column(Text, nullable=True)  # Role within project dependency graph
     confidence_score = Column(Float, default=0.0)  # 0-100 confidence
-    # Use Vector(1536) for Postgres, Text for SQLite (JSON array)
-    embedding = Column(Vector(1536) if Vector else Text, nullable=True) 
+    # Use Vector(3072) for Postgres, Text for SQLite (JSON array)
+    embedding = Column(Vector(3072) if Vector else Text, nullable=True) 
     created_at = Column(DateTime, default=datetime.utcnow)
 
     # Relationships

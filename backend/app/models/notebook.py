@@ -19,7 +19,7 @@ class Notebook(Base):
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
     chat_history = Column(Text, default="[]")  # JSON array of {role, content, timestamp}
     # Storage for the latest question embedding to enable vector search
-    question_embedding = Column(Vector(1536) if Vector else Text, nullable=True)
+    question_embedding = Column(Vector(3072) if Vector else Text, nullable=True)
     user_notes = Column(Text, default="")
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
