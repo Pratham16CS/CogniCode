@@ -6,17 +6,35 @@ from sqlalchemy.orm import DeclarativeBase
 
 from app.config import settings
 
-# For SQLite, we need connect_args to allow multi-thread access
-connect_args = {}
-if settings.DATABASE_URL.startswith("sqlite"):
-    connect_args = {"check_same_thread": False}
-
-# Ensure Postgres URL uses the async driver
+# Handle Postgres SSL and Driver
 db_url = settings.DATABASE_URL
-if db_url.startswith("postgres://"):
-    db_url = db_url.replace("postgres://", "postgresql+asyncpg://", 1)
-elif db_url.startswith("postgresql://"):
-    db_url = db_url.replace("postgresql://", "postgresql+asyncpg://", 1)
+connect_args = {}
+
+if db_url.startswith("sqlite"):
+    connect_args = {"check_same_thread": False}
+else:
+    # Ensure Postgres URL uses the async driver
+    if db_url.startswith("postgres://"):
+        db_url = db_url.replace("postgres://", "postgresql+asyncpg://", 1)
+    elif db_url.startswith("postgresql://"):
+        db_url = db_url.replace("postgresql://", "postgresql+asyncpg://", 1)
+    
+    # asyncpg doesn't support certain parameters like 'sslmode' or 'channel_binding' in the URL
+    if "postgresql" in db_url:
+        import urllib.parse as urlparse
+        url_parts = list(urlparse.urlparse(db_url))
+        query = dict(urlparse.parse_qsl(url_parts[4]))
+        
+        # Handle sslmode
+        if "sslmode" in query:
+            if query.pop("sslmode") in ("require", "prefer", "allow"):
+                connect_args["ssl"] = True
+        
+        # Strip other incompatible parameters often found in Neon/hosted URLs
+        query.pop("channel_binding", None)
+            
+        url_parts[4] = urlparse.urlencode(query)
+        db_url = urlparse.urlunparse(url_parts)
 
 engine = create_async_engine(
     db_url,
