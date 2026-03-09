@@ -2,12 +2,26 @@
  * ProjectOverview — displays repo-level overview and tech stack.
  */
 
-import { FiGitBranch, FiLayers } from "react-icons/fi";
+import { FiGitBranch, FiLayers, FiRefreshCw } from "react-icons/fi";
 import ReactMarkdown from "react-markdown";
 import TechStackCard from "./TechStackCard";
+import { repoAPI } from "../../api/client";
+import { useNavigate } from "react-router-dom";
 
 export default function ProjectOverview({ repo }) {
+    const navigate = useNavigate();
     if (!repo) return null;
+
+    const handleReset = async () => {
+        if (window.confirm("This will wipe all currently mapped skeletons and cache for this repo. You will need to re-analyze it. Proceed?")) {
+            try {
+                await repoAPI.reset(repo.id);
+                navigate("/");
+            } catch (err) {
+                alert("Failed to reset: " + err.message);
+            }
+        }
+    };
 
     let techStack = {};
     try {
@@ -19,14 +33,23 @@ export default function ProjectOverview({ repo }) {
     return (
         <div className="p-8 space-y-8 overflow-y-auto bg-bg-primary font-sans h-full">
             {/* Header */}
-            <div className="flex items-center gap-4 border-b border-accent/15 pb-6">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#3b82f6] to-[#10b981] flex items-center justify-center shadow-[0_0_15px_rgba(59,130,246,0.2)]">
-                    <FiGitBranch className="text-white" size={24} />
+            <div className="flex items-center justify-between border-b border-accent/15 pb-6">
+                <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#3b82f6] to-[#10b981] flex items-center justify-center shadow-[0_0_15px_rgba(59,130,246,0.2)]">
+                        <FiGitBranch className="text-white" size={24} />
+                    </div>
+                    <div>
+                        <h2 className="text-2xl font-bold text-[#f0f6ff] font-display tracking-tight">{repo.repo_name}</h2>
+                        <p className="text-sm font-mono text-accent mt-1 tracking-wide">{repo.total_files} FILES ANALYZED</p>
+                    </div>
                 </div>
-                <div>
-                    <h2 className="text-2xl font-bold text-[#f0f6ff] font-display tracking-tight">{repo.repo_name}</h2>
-                    <p className="text-sm font-mono text-accent mt-1 tracking-wide">{repo.total_files} FILES ANALYZED</p>
-                </div>
+
+                <button
+                    onClick={handleReset}
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg border border-[#ef4444]/30 text-[#ef4444] text-xs font-mono uppercase tracking-widest hover:bg-[#ef4444]/10 transition-all"
+                >
+                    <FiRefreshCw size={14} /> Re-analyze Repo
+                </button>
             </div>
 
             {/* Overview */}

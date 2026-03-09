@@ -43,6 +43,8 @@ export const repoAPI = {
     analyze: (data) => client.post("/repos/analyze", data),
     list: () => client.get("/repos/"),
     get: (id) => client.get(`/repos/${id}`),
+    reset: (id) => client.post(`/repos/${id}/reset`),
+    delete: (id) => client.delete(`/repos/${id}`),
 };
 
 // === File API ===

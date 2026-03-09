@@ -83,3 +83,57 @@ async def get_repo(
     if not repo:
         raise HTTPException(status_code=404, detail="Repository not found")
     return RepoStatusResponse.model_validate(repo)
+
+
+@router.post("/{repo_id}/reset")
+async def reset_repo(
+    repo_id: int,
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    Reset repository analysis: clear all file analyses, clear cache, and set status to pending.
+    """
+    from sqlalchemy import delete
+    from app.models.file_analysis import FileAnalysis
+    from app.models.file_cache import FileCache
+
+    result = await db.execute(
+        select(Repository).where(Repository.id == repo_id, Repository.user_id == user.id)
+    )
+    repo = result.scalar_one_or_none()
+    if not repo:
+        raise HTTPException(status_code=404, detail="Repository not found")
+
+    # 1. Clear file analyses (this also deletes notebooks via cascade if configured)
+    await db.execute(delete(FileAnalysis).where(FileAnalysis.repository_id == repo_id))
+    
+    # 2. Clear file cache for this repo URL 
+    await db.execute(delete(FileCache).where(FileCache.repo_url == repo.repo_url))
+
+    # 3. Reset repository record
+    repo.status = "pending"
+    repo.indexed_files = 0
+    repo.project_overview = None
+    
+    await db.commit()
+    return {"message": f"Repository {repo.repo_name} reset successfully."}
+
+
+@router.delete("/{repo_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_repo(
+    repo_id: int,
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """Delete a repository and all its associated data."""
+    result = await db.execute(
+        select(Repository).where(Repository.id == repo_id, Repository.user_id == user.id)
+    )
+    repo = result.scalar_one_or_none()
+    if not repo:
+        raise HTTPException(status_code=404, detail="Repository not found")
+
+    await db.delete(repo)
+    await db.commit()
+    return None

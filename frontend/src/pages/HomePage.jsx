@@ -211,17 +211,33 @@ export default function HomePage() {
                                         ${repo.status === "ready" ? "cursor-pointer hover:border-accent/50 hover:bg-[#0f1c38]/80 hover:shadow-[0_5px_20px_rgba(59,130,246,0.15)] group" : "opacity-80"}
                                     `}
                                 >
-                                    <div>
+                                    <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-2 mb-1.5">
                                             <FiGithub className="text-accent/60" size={16} />
                                             <h3 className="font-display font-semibold text-[#f0f6ff] text-base truncate">
                                                 {repo.repo_name}
                                             </h3>
                                         </div>
-                                        <p className="font-sans text-xs text-[#64748b]">
-                                            Analyzed on {new Date(repo.updated_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
-                                        </p>
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                if (window.confirm("Delete this repository and all analysis data?")) {
+                                                    repoAPI.delete(repo.id).then(() => {
+                                                        setRepos(repos.filter(r => r.id !== repo.id));
+                                                    }).catch(err => {
+                                                        alert("Failed to delete repository: " + err.message);
+                                                    });
+                                                }
+                                            }}
+                                            className="p-1.5 rounded-lg text-[#64748b] hover:text-[#ef4444] hover:bg-[#ef4444]/10 transition-all z-10"
+                                            title="Delete Repository"
+                                        >
+                                            <FiAlertTriangle size={14} />
+                                        </button>
                                     </div>
+                                    <p className="font-sans text-xs text-[#64748b]">
+                                        Analyzed on {new Date(repo.updated_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                                    </p>
 
                                     <div className="flex items-center justify-between mt-auto pt-2 border-t border-accent/10">
                                         <span className={`font-mono text-[0.7rem] uppercase tracking-wider flex items-center gap-1.5 ${statusColors[repo.status]}`}>
