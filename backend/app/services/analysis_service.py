@@ -24,8 +24,7 @@ logger = logging.getLogger(__name__)
 
 # Max file size to analyze (skip huge generated files)
 MAX_FILE_SIZE = 100_000  # 100KB
-BATCH_SIZE = 25  # Process N files per batch
-
+BATCH_SIZE = 5  # Reduced from 25 to avoid LLM output truncation
 
 async def analyze_repository(
     db: AsyncSession,
@@ -131,6 +130,27 @@ async def analyze_repository(
             batch_data = [{"path": item["path"], "content": item["content"]} for item in batch]
             llm_results = await skeleton_service.generate_batch_skeletons(batch_data)
             
+            # Fallback: If batch mapping failed, try each file in the batch individually
+            if not llm_results and batch:
+                logger.warning(f"Batch mapping failed for batch starting at index {i}. Falling back to individual processing.")
+                llm_results = []
+                for single_item in batch_data:
+                    # generate_skeleton is more robust for single files
+                    logger.info(f"Individual fallback for {single_item['path']}")
+                    try:
+                        skeleton = await skeleton_service.generate_skeleton(single_item['path'], single_item['content'])
+                        core = await skeleton_service.generate_logical_core(single_item['path'], skeleton)
+                        log = await skeleton_service.generate_removal_log(single_item['path'], single_item['content'], skeleton)
+                        llm_results.append({
+                            "path": single_item['path'],
+                            "skeleton": skeleton,
+                            "summary": "Generated via fallback.", # We could call context generator but it might be overkill
+                            "logical_core": core,
+                            "removal_log": json.loads(log) if log.startswith("[") else []
+                        })
+                    except Exception as e:
+                        logger.error(f"Fallback failed for {single_item['path']}: {e}")
+
             # Match LLM results back to our mapped batch
             llm_map = {item["path"]: item for item in llm_results}
             
