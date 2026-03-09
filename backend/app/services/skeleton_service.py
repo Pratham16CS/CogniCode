@@ -138,7 +138,7 @@ Output ONLY valid code."""
 
     skeleton = await llm_service.generate(
         prompt=prompt,
-        task_type=TaskType.INDEXING,
+        task_type=TaskType.MAPPING,
         system_prompt=system,
         temperature=0.2,
     )
@@ -218,7 +218,7 @@ Generate the removal log as a JSON array."""
 
     result = await llm_service.generate(
         prompt=prompt,
-        task_type=TaskType.INDEXING,
+        task_type=TaskType.MAPPING,
         system_prompt=REMOVAL_LOG_SYSTEM_PROMPT,
         temperature=0.1,
     )

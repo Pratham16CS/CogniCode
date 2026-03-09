@@ -97,6 +97,7 @@ async def reset_repo(
     from sqlalchemy import delete
     from app.models.file_analysis import FileAnalysis
     from app.models.file_cache import FileCache
+    from app.models.notebook import Notebook
 
     result = await db.execute(
         select(Repository).where(Repository.id == repo_id, Repository.user_id == user.id)
@@ -105,7 +106,15 @@ async def reset_repo(
     if not repo:
         raise HTTPException(status_code=404, detail="Repository not found")
 
-    # 1. Clear file analyses (this also deletes notebooks via cascade if configured)
+    # 0. Clear notebooks first because they reference file_analyses
+    await db.execute(
+        delete(Notebook)
+        .where(Notebook.file_analysis_id.in_(
+            select(FileAnalysis.id).where(FileAnalysis.repository_id == repo_id)
+        ))
+    )
+
+    # 1. Clear file analyses
     await db.execute(delete(FileAnalysis).where(FileAnalysis.repository_id == repo_id))
     
     # 2. Clear file cache for this repo URL 
